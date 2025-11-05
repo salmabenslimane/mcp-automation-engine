@@ -1,0 +1,8 @@
+# Use the official Airflow image as a base
+FROM apache/airflow:3.1.1
+
+# Install additional Python dependencies
+RUN pip install --no-cache-dir \
+    duckdb 
+# Optional: install any data science or visualization libs you plan to use later
+# RUN pip install plotly matplotlib seaborn
