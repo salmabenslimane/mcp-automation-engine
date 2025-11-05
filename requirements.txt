@@ -1,0 +1,63 @@
+# Flight-Sales-Analysis - Airflow project requirements
+# Core Airflow (choose extras you need)
+apache-airflow[postgres,amazon,google,celery,redis]>=2.6,<3.0
+
+# Airflow providers (explicit is helpful)
+apache-airflow-providers-postgres>=5.0
+apache-airflow-providers-amazon>=6.0
+apache-airflow-providers-google>=8.0
+airflow.operators
+
+
+# Database drivers and ORM
+psycopg2-binary>=2.9
+SQLAlchemy>=1.4
+alembic>=1.11
+
+# Data processing
+pandas>=2.0
+numpy>=1.24
+pyarrow>=10.0
+fastparquet>=0.9
+
+# Machine learning / analysis
+scikit-learn>=1.1
+scipy>=1.8
+ydata-profiling>=4.0
+
+# Visualization
+matplotlib>=3.5
+seaborn>=0.12
+plotly>=5.0
+altair>=5.0
+
+# Cloud SDKs (optional; include if you interact with cloud storage / BQ / S3)
+boto3>=1.26
+google-cloud-storage>=2.0
+google-cloud-bigquery>=3.0
+
+# Utilities
+python-dotenv>=1.0
+requests>=2.28
+tqdm>=4.60
+python-dateutil>=2.8
+typing-extensions>=4.0
+
+# Parquet/IO helpers
+s3fs>=2023.1
+gcsfs>=2023.1
+
+# Testing & development tools
+pytest>=7.0
+pytest-cov>=4.0
+black>=23.0
+isort>=5.0
+flake8>=5.0
+
+# Optional: CLI / notebook support
+ipython>=8.0
+jupyterlab>=4.0
+
+# Pin or add constraint file for Airflow in production:
+# When installing Airflow in production, use the official constraints file recommended by Airflow:
+# pip install "apache-airflow==X.Y.Z" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-<branch>/constraints-<python-version>.txt"
