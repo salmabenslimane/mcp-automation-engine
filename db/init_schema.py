@@ -6,10 +6,10 @@ def create_schema():
     conn.execute("CREATE SCHEMA IF NOT EXISTS raw;")
     conn.execute("""
     CREATE TABLE IF NOT EXISTS raw.bookings (
-        Booking_ID VARCHAR,
-        Booking_Date DATE,
-        Flight_ID VARCHAR,
         Flight_Date DATE,
+        Booking_Date DATE,
+        Booking_ID VARCHAR,
+        Flight_ID VARCHAR,
         Departure_Airport VARCHAR,
         Arrival_Airport VARCHAR,
         Departure_Country VARCHAR,

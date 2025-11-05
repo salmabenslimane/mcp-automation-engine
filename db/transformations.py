@@ -1,11 +1,9 @@
-'''It’s the bridge between:
+"""
+It’s the bridge between:
 
 the data engineering layer (ETL) and
+the AI + analytics layer (insights_agent & dashboard).
 
-the AI + analytics layer (insights_agent & dashboard).'''
-
-"""
-transformations.py
 -------------------
 Transforms raw flight sales data from DuckDB into summarized business KPIs.
 
@@ -38,16 +36,17 @@ def transform_data():
 
     # Read all raw data
     df_raw = conn.execute("SELECT * FROM raw.bookings;").fetchdf()
+
     if df_raw.empty:
         print("⚠️ No data found in raw.bookings — skipping transformation.")
         conn.close()
         return
 
     # --- Compute KPIs ---
-    total_revenue = df_raw["Revenue"].sum()
-    total_bookings = df_raw["Booking_ID"].nunique()
-    avg_ticket_price = df_raw["Unit_Price"].mean()
-    total_passengers = df_raw["Quantity"].sum()
+    total_revenue = float(df_raw["Revenue"].sum())
+    total_bookings = int(df_raw["Booking_ID"].nunique())
+    avg_ticket_price = float(df_raw["Unit_Price"].mean())
+    total_passengers = int(df_raw["Quantity"].sum())
 
     # Grouped KPIs
     revenue_by_class = (
@@ -99,16 +98,26 @@ def transform_data():
     print("✅ Stored main KPIs in processed.bookings_summary.")
 
     # --- Optional: store detailed breakdowns (for dashboard use) ---
-    conn.execute("CREATE TABLE IF NOT EXISTS processed.revenue_by_class AS SELECT * FROM revenue_by_class LIMIT 0;")
-    conn.execute("CREATE TABLE IF NOT EXISTS processed.top_routes AS SELECT * FROM top_routes LIMIT 0;")
-    conn.execute("CREATE TABLE IF NOT EXISTS processed.top_countries AS SELECT * FROM top_countries LIMIT 0;")
-    conn.execute("CREATE TABLE IF NOT EXISTS processed.daily_revenue AS SELECT * FROM daily_revenue LIMIT 0;")
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS processed.revenue_by_class AS SELECT * FROM revenue_by_class LIMIT 0;
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS processed.top_routes AS SELECT * FROM top_routes LIMIT 0;
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS processed.top_countries AS SELECT * FROM top_countries LIMIT 0;
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS processed.daily_revenue AS SELECT * FROM daily_revenue LIMIT 0;
+    """)
 
+    # Register DataFrames
     conn.register("revenue_by_class", revenue_by_class)
     conn.register("top_routes", top_routes)
     conn.register("top_countries", top_countries)
     conn.register("daily_revenue", daily_revenue)
 
+    # Clear and reload processed tables
     conn.execute("DELETE FROM processed.revenue_by_class;")
     conn.execute("DELETE FROM processed.top_routes;")
     conn.execute("DELETE FROM processed.top_countries;")
@@ -125,3 +134,5 @@ def transform_data():
 
 if __name__ == "__main__":
     transform_data()
+'''What it does:    
+Transforms raw booking data into key performance indicators (KPIs) and stores them in a processed schema.   '''
