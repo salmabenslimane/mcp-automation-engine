@@ -5,20 +5,26 @@ def create_schema():
     conn = get_connection()
     conn.execute("CREATE SCHEMA IF NOT EXISTS raw;")
     conn.execute("""
-        CREATE TABLE IF NOT EXISTS raw.bookings (
-            Booking_ID VARCHAR,
-            Booking_Date TIMESTAMP,
-            Flight_ID VARCHAR,
-            Passenger_ID VARCHAR,
-            Passenger_Name VARCHAR,
-            Email VARCHAR,
-            Gender VARCHAR,
-            Ticket_Class VARCHAR,
-            Quantity INTEGER,
-            Unit_Price DOUBLE,
-            Revenue DOUBLE,
-            load_date DATE DEFAULT CURRENT_DATE
-        );
+    CREATE TABLE IF NOT EXISTS raw.bookings (
+        Booking_ID VARCHAR,
+        Booking_Date DATE,
+        Flight_ID VARCHAR,
+        Flight_Date DATE,
+        Departure_Airport VARCHAR,
+        Arrival_Airport VARCHAR,
+        Departure_Country VARCHAR,
+        Arrival_Country VARCHAR,
+        Passenger_ID VARCHAR,
+        Passenger_Name VARCHAR,
+        Email VARCHAR,
+        Gender VARCHAR,
+        Ticket_Class VARCHAR,
+        Quantity INTEGER,
+        Unit_Price DOUBLE,
+        Revenue DOUBLE,
+        load_date DATE
+    );
+
     """)
     conn.close()
     print("✅ Schema created successfully!")
