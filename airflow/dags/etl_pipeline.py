@@ -1,51 +1,51 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from datetime import datetime
-import subprocess
+from datetime import datetime, timedelta
+import sys
 import os
 
-# Default DAG arguments
+# --- Add project root to path ---
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../db"))
+
+# Import your db scripts
+from init_schema import init_schema
+from fetch_and_insert import insert_data
+from transformations import transform_data
+
 default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'retries': 1,
+    "owner": "airflow",
+    "depends_on_past": False,
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 1,
+    "retry_delay": timedelta(minutes=5),
 }
 
-# Define your DAG
 with DAG(
-    dag_id='etl_pipeline',
+    dag_id="flight_etl_pipeline",
     default_args=default_args,
-    description='ETL pipeline to load and process flight sales data using DuckDB',
-    schedule='@daily',
+    description="Daily ETL for Flight Sales Data",
+    schedule="0 0 * * *",  # every day at 00:00
     start_date=datetime(2025, 11, 1),
     catchup=False,
-    tags=['duckdb', 'etl', 'flight-sales'],
+    tags=["flight", "etl", "duckdb"],
 ) as dag:
 
-    def run_init_schema():
-        """Create the DuckDB schema if it doesn't exist."""
-        script_path = "/opt/airflow/db/init_schema.py"
-        print(f"Running {script_path} ...")
-        subprocess.run(["python", script_path], check=True)
-        print("✅ Schema initialized successfully.")
-
-    def run_fetch_and_insert():
-        """Fetch data from API and insert into DuckDB."""
-        script_path = "/opt/airflow/db/fetch_and_insert.py"
-        print(f"Running {script_path} ...")
-        subprocess.run(["python", script_path], check=True)
-        print("✅ Data fetched and inserted successfully.")
-
-    # Define tasks
-    init_schema = PythonOperator(
-        task_id='init_schema',
-        python_callable=run_init_schema,
+    init_schema_task = PythonOperator(
+        task_id="init_schema",
+        python_callable=init_schema,
     )
 
-    fetch_and_insert = PythonOperator(
-        task_id='fetch_and_insert',
-        python_callable=run_fetch_and_insert,
+    fetch_insert_task = PythonOperator(
+        task_id="fetch_and_insert",
+        python_callable=insert_data,
     )
 
-    # DAG dependencies
-    init_schema >> fetch_and_insert
+    transform_task = PythonOperator(
+        task_id="transform_data",
+        python_callable=transform_data,
+    )
+
+    # Task dependencies
+    init_schema_task >> fetch_insert_task >> transform_task
+'''What it does:    This DAG initializes the DuckDB schema, fetches flight sales data from an API, and transforms it for analysis.'''
