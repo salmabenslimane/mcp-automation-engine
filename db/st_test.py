@@ -91,3 +91,14 @@ else:
 st.divider()
 st.caption("Built with ❤️ using Streamlit + DuckDB | Flight Intelligence Automation Agent")
 
+import subprocess
+import streamlit as st
+
+st.header("💡 AI-Generated Insights")
+
+if st.button("Generate Insights"):
+    with st.spinner("Generating insights..."):
+        result = subprocess.check_output(
+            ["python", "../agents/insights_agent.py"], text=True
+        )
+        st.text(result)
