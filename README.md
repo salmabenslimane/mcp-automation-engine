@@ -130,3 +130,30 @@ flight_intelligence_agent/
 ---
 
 ## 🚀 Quickstart
+
+### 1️⃣ Setup Environment
+```bash
+git clone https://github.com/<your-username>/flight_intelligence_agent.git
+cd flight_intelligence_agent
+pip install -r requirements.txt
+```
+
+### 2️⃣ Run ETL Pipeline
+```bash
+python db/init_schema.py
+python db/fetch_and_insert.py
+```
+Or start with Airflow:
+```bash
+docker-compose up
+```
+
+### 3️⃣ Run AI Insight Agent
+```bash
+python agents/insights_agent.py
+```
+
+### 4️⃣ Launch Dashboard
+```bash
+streamlit run dashboard/app.py
+```
