@@ -2,3 +2,5 @@ airflow/logs/
 airflow/plugins/
 airflow/config/
 db/__pycache__/
+agents/__pycache__/
+agents/.env
