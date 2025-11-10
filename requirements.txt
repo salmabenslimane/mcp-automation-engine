@@ -61,3 +61,6 @@ jupyterlab>=4.0
 # Pin or add constraint file for Airflow in production:
 # When installing Airflow in production, use the official constraints file recommended by Airflow:
 # pip install "apache-airflow==X.Y.Z" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-<branch>/constraints-<python-version>.txt"
+ 
+ transformers>=4.30.2
+ 
